@@ -4,7 +4,7 @@ A modern, responsive Kanban board application built with React, TypeScript, and 
 
 ## 🚀 Live Demo
 
-[Deployed Version](https://your-vercel-url-here.vercel.app) _(Coming soon)_
+[Deployed Version](https://kanban-board-ua6i.vercel.app/)
 
 ## ✨ Features
 
