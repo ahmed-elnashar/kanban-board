@@ -12,7 +12,11 @@ interface KanbanState {
   draggedTaskId: string | null;
 
   // Actions
-  addTask: (title: string, description?: string) => void;
+  addTask: (
+    title: string,
+    description?: string,
+    initialStatus?: Task['status']
+  ) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   moveTask: (taskId: string, fromStatus: string, toStatus: string) => void;
@@ -41,12 +45,16 @@ export const useKanbanStore = create<KanbanState>()(
         draggedTaskId: null,
 
         // Actions
-        addTask: (title: string, description?: string) => {
+        addTask: (
+          title: string,
+          description?: string,
+          initialStatus: Task['status'] = 'todo'
+        ) => {
           const newTask: Task = {
             id: generateId(),
             title,
             description,
-            status: 'todo',
+            status: initialStatus,
             createdAt: new Date(),
             updatedAt: new Date(),
           };
@@ -54,7 +62,7 @@ export const useKanbanStore = create<KanbanState>()(
           set((state) => {
             const newTasks = [...state.tasks, newTask];
             const newColumns = state.columns.map((column) => {
-              if (column.status === 'todo') {
+              if (column.status === initialStatus) {
                 return { ...column, tasks: [...column.tasks, newTask] };
               }
               return column;

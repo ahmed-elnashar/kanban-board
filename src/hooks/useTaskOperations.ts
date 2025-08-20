@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
 import { useKanbanStore } from '../store/kanbanStore';
+import type { Task } from '../types';
 
 export const useTaskOperations = () => {
   const { addTask, updateTask, deleteTask } = useKanbanStore();
 
   const createTask = useCallback(
-    (title: string, description?: string) => {
+    (title: string, description?: string, columnId?: Task['status']) => {
       if (!title.trim()) return;
-      addTask(title.trim(), description?.trim());
+      addTask(title.trim(), description?.trim(), columnId);
     },
     [addTask]
   );

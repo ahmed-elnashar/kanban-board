@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useTaskOperations } from '../../hooks/useTaskOperations';
+import type { Task } from '../../types';
 
-export const AddTask: React.FC = () => {
+interface AddTaskProps {
+  columnId: Task['status'];
+}
+
+export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
   const { createTask } = useTaskOperations();
   const [isExpanded, setIsExpanded] = useState(false);
   const [title, setTitle] = useState('');
@@ -10,7 +15,7 @@ export const AddTask: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      createTask(title.trim(), description.trim() || undefined);
+      createTask(title.trim(), description.trim() || undefined, columnId);
       setTitle('');
       setDescription('');
       setIsExpanded(false);
@@ -64,7 +69,7 @@ export const AddTask: React.FC = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Add description (optional)..."
-          className="w-full mb-4 px-3 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
+          className="w-full mb-3 px-3 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
           rows={2}
         />
         <div className="flex items-center space-x-2">

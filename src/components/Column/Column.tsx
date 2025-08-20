@@ -126,7 +126,7 @@ export const Column: React.FC<ColumnProps> = ({ column }) => {
         </div>
 
         {/* Add Task Button */}
-        <AddTask />
+        <AddTask columnId={column.status} />
       </div>
 
       {/* Column Content */}
