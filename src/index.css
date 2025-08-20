@@ -5,6 +5,38 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Theme Colors */
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-primary-light: #f3f4f6;
+  --color-primary-focus: rgba(139, 92, 246, 0.1);
+
+  /* Secondary Colors */
+  --color-secondary: #e2e8f0;
+  --color-secondary-hover: #cbd5e1;
+  --color-secondary-text: #475569;
+
+  /* Neutral Colors */
+  --color-neutral: #64748b;
+  --color-neutral-light: #f8fafc;
+  --color-neutral-hover: #f1f5f9;
+
+  /* Success/Error Colors */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-error-light: #fef2f2;
+
+  /* Border Colors */
+  --color-border: #d1d5db;
+  --color-border-light: #e5e7eb;
+
+  /* Text Colors */
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #9ca3af;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -395,6 +427,18 @@ code {
   cursor: not-allowed;
 }
 
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
+}
+
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
+.disabled\:hover\:bg-violet-600:disabled:hover {
+  background-color: #8b5cf6;
+}
+
 .opacity-0 {
   opacity: 0;
 }
@@ -457,6 +501,10 @@ code {
 
 .hover\:bg-slate-200:hover {
   background-color: #e2e8f0;
+}
+
+.hover\:bg-slate-300:hover {
+  background-color: #cbd5e1;
 }
 
 .hover\:bg-slate-400:hover {
@@ -750,7 +798,7 @@ code {
 }
 
 .bg-blue-600 {
-  color: #2563eb;
+  background-color: #2563eb;
 }
 
 .bg-blue-700 {

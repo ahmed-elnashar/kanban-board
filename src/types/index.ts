@@ -35,6 +35,8 @@ export interface KanbanStore {
   columns: Column[];
   taskHistory: TaskHistory[];
   draggedTaskId: string | null;
+  filterQuery: string;
+  showHistory: boolean;
 
   // Actions
   addTask: (
@@ -55,5 +57,7 @@ export interface KanbanStore {
   setDraggedTask: (taskId: string | null) => void;
   reorderTasks: (columnId: string, taskIds: string[]) => void;
   resetStore: () => void;
+  setFilterQuery: (query: string) => void;
+  toggleHistory: () => void;
 }
 

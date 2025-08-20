@@ -10,6 +10,8 @@ interface KanbanState {
   columns: Column[];
   taskHistory: TaskHistory[];
   draggedTaskId: string | null;
+  filterQuery: string;
+  showHistory: boolean;
 
   // Actions
   addTask: (
@@ -30,6 +32,8 @@ interface KanbanState {
   setDraggedTask: (taskId: string | null) => void;
   reorderTasks: (columnId: string, taskIds: string[]) => void;
   resetStore: () => void;
+  setFilterQuery: (query: string) => void;
+  toggleHistory: () => void;
 }
 
 export const useKanbanStore = create<KanbanState>()(
@@ -42,6 +46,8 @@ export const useKanbanStore = create<KanbanState>()(
         : getInitialColumns(),
     taskHistory: LocalStorageService.getHistory(),
     draggedTaskId: null,
+    filterQuery: '',
+    showHistory: false,
 
     // Actions
     addTask: (
@@ -231,6 +237,14 @@ export const useKanbanStore = create<KanbanState>()(
       });
     },
 
+    setFilterQuery: (query: string) => {
+      set({ filterQuery: query });
+    },
+
+    toggleHistory: () => {
+      set((state) => ({ showHistory: !state.showHistory }));
+    },
+
     // Add a reset function to clear localStorage and reset to initial state
     resetStore: () => {
       if (typeof window !== 'undefined') {
@@ -243,6 +257,8 @@ export const useKanbanStore = create<KanbanState>()(
         columns: getInitialColumns(),
         taskHistory: [],
         draggedTaskId: null,
+        filterQuery: '',
+        showHistory: false,
       }));
     },
   }))

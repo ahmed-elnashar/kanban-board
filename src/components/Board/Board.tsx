@@ -3,11 +3,18 @@ import { useKanbanData } from '../../hooks/useKanbanData';
 import { useKanbanStore } from '../../store/kanbanStore';
 import { DndProvider } from '../DndProvider/DndProvider';
 import { Column } from '../Column/Column';
+import { Filter } from '../Filter/Filter';
+import { TaskHistory } from '../TaskHistory/TaskHistory';
 import styles from './Board.module.css';
 
 export const Board: React.FC = () => {
-  const { columns, totalTasks, completedTasks, progressPercentage } =
-    useKanbanData();
+  const {
+    columns,
+    totalTasks,
+    completedTasks,
+    progressPercentage,
+    isFiltered,
+  } = useKanbanData();
   const { resetStore } = useKanbanStore();
 
   const handleReset = () => {
@@ -67,6 +74,17 @@ export const Board: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Filter and History */}
+        <Filter />
+        <TaskHistory />
+
+        {/* Filter Status */}
+        {isFiltered && (
+          <div className={styles.filterStatus}>
+            <span>Showing filtered results</span>
+          </div>
+        )}
 
         {/* Kanban Columns */}
         <div className={styles.columns}>

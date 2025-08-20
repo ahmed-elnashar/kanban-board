@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTaskOperations } from '../../hooks/useTaskOperations';
 import type { Task } from '../../types';
+import styles from './AddTask.module.css';
 
 interface AddTaskProps {
   columnId: Task['status'];
@@ -62,7 +63,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full mx-2 mb-2 mt-2"
+      className="mx-2 mb-2 mt-2"
       onMouseDown={(e) => e.stopPropagation()}
       onTouchStart={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
@@ -97,7 +98,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
             disabled={!title.trim()}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="flex-1 px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`${styles.saveButton} flex-1`}
           >
             Add Task
           </button>
@@ -109,7 +110,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
             }}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors"
+            className={styles.cancelButton}
           >
             Cancel
           </button>
