@@ -1,4 +1,4 @@
-import { Task, Column, TaskHistory } from '../types';
+import type { Task, Column, TaskHistory } from '../types';
 
 const STORAGE_KEYS = {
   TASKS: 'kanban-tasks',
@@ -13,11 +13,13 @@ export class LocalStorageService {
       if (!stored) return [];
 
       const tasks = JSON.parse(stored);
-      return tasks.map((task: any) => ({
-        ...task,
-        createdAt: new Date(task.createdAt),
-        updatedAt: new Date(task.updatedAt),
-      }));
+      return tasks.map(
+        (task: Partial<Task> & { createdAt: string; updatedAt: string }) => ({
+          ...task,
+          createdAt: new Date(task.createdAt),
+          updatedAt: new Date(task.updatedAt),
+        })
+      );
     } catch (error) {
       console.error('Error loading tasks from localStorage:', error);
       return [];
@@ -38,14 +40,26 @@ export class LocalStorageService {
       if (!stored) return [];
 
       const columns = JSON.parse(stored);
-      return columns.map((column: any) => ({
-        ...column,
-        tasks: column.tasks.map((task: any) => ({
-          ...task,
-          createdAt: new Date(task.createdAt),
-          updatedAt: new Date(task.updatedAt),
-        })),
-      }));
+      return columns.map(
+        (
+          column: Partial<Column> & {
+            tasks: Array<
+              Partial<Task> & { createdAt: string; updatedAt: string }
+            >;
+          }
+        ) => ({
+          ...column,
+          tasks: column.tasks.map(
+            (
+              task: Partial<Task> & { createdAt: string; updatedAt: string }
+            ) => ({
+              ...task,
+              createdAt: new Date(task.createdAt),
+              updatedAt: new Date(task.updatedAt),
+            })
+          ),
+        })
+      );
     } catch (error) {
       console.error('Error loading columns from localStorage:', error);
       return [];
@@ -66,10 +80,12 @@ export class LocalStorageService {
       if (!stored) return [];
 
       const history = JSON.parse(stored);
-      return history.map((item: any) => ({
-        ...item,
-        timestamp: new Date(item.timestamp),
-      }));
+      return history.map(
+        (item: Partial<TaskHistory> & { timestamp: string }) => ({
+          ...item,
+          timestamp: new Date(item.timestamp),
+        })
+      );
     } catch (error) {
       console.error('Error loading history from localStorage:', error);
       return [];

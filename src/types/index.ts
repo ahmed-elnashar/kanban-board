@@ -5,6 +5,11 @@ export interface Task {
   status: 'todo' | 'in-progress' | 'done';
   createdAt: Date;
   updatedAt: Date;
+  tag?: string;
+  assignedUsers?: string[];
+  dueDate?: string;
+  comments?: number;
+  attachments?: number;
 }
 
 export interface Column {
@@ -36,7 +41,12 @@ export interface KanbanStore {
   taskHistory: TaskHistory[];
 
   // Actions
-  addTask: (title: string, description?: string) => void;
+  addTask: (
+    title: string,
+    description?: string,
+    tag?: string,
+    dueDate?: string
+  ) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   moveTask: (taskId: string, fromStatus: string, toStatus: string) => void;
