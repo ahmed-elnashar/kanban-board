@@ -1,5 +1,18 @@
+let idCounter = 0;
+
 export const generateId = (): string => {
-  return Math.random().toString(36).substr(2, 9);
+  idCounter++;
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substr(2, 12);
+  const counter = idCounter.toString(36);
+
+  // Use crypto.randomUUID if available for even better uniqueness
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    const uuid = crypto.randomUUID().replace(/-/g, '').substr(0, 8);
+    return `${timestamp}-${random}-${counter}-${uuid}`;
+  }
+
+  return `${timestamp}-${random}-${counter}`;
 };
 
 export const formatDate = (date: Date): string => {

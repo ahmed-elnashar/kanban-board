@@ -1,18 +1,49 @@
 import React, { useState } from 'react';
-import type { Task as TaskType } from '../../types';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useTaskOperations } from '../../hooks/useTaskOperations';
+import styles from './Task.module.css';
+import type { Task as TaskType } from '../../types';
 
 interface TaskProps {
   task: TaskType;
 }
 
 export const Task: React.FC<TaskProps> = ({ task }) => {
-  const { editTask, removeTask } = useTaskOperations();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [editDescription, setEditDescription] = useState(
     task.description || ''
   );
+  const { editTask, removeTask } = useTaskOperations();
+
+  // Only enable drag and drop when not editing
+  const sortableConfig = {
+    id: task.id,
+    data: {
+      type: 'task',
+      task,
+    },
+    disabled: isEditing, // Disable drag when editing
+  };
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable(sortableConfig);
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
 
   const handleSave = () => {
     if (editTitle.trim()) {
@@ -30,143 +61,126 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
     setIsEditing(false);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      handleSave();
-    } else if (e.key === 'Escape') {
-      handleCancel();
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      removeTask(task.id);
     }
   };
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
-  };
+  if (isDragging) {
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className={`${styles.task} ${styles.dragging}`}
+      >
+        <div className={styles.content}>
+          <div className={styles.title}>{task.title}</div>
+          {task.description && (
+            <div className={styles.description}>{task.description}</div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   if (isEditing) {
     return (
-      <div className="bg-white border-2 border-violet-300 rounded-lg p-4 shadow-sm">
-        <input
-          type="text"
-          value={editTitle}
-          onChange={(e) => setEditTitle(e.target.value)}
-          onKeyDown={handleKeyPress}
-          className="w-full mb-3 px-3 py-2 text-sm font-medium text-slate-900 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
-          autoFocus
-        />
-        <textarea
-          value={editDescription}
-          onChange={(e) => setEditDescription(e.target.value)}
-          onKeyDown={handleKeyPress}
-          placeholder="Add description..."
-          className="w-full mb-4 px-3 py-2 text-sm text-slate-600 border border-slate-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
-          rows={2}
-        />
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={handleSave}
-            className="px-3 py-1.5 bg-violet-600 text-white text-xs font-medium rounded hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-1 transition-colors"
-          >
-            Save
-          </button>
-          <button
-            onClick={handleCancel}
-            className="px-3 py-1.5 bg-slate-100 text-slate-700 text-xs font-medium rounded hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-1 transition-colors"
-          >
-            Cancel
-          </button>
+      <div
+        className={styles.task}
+        onMouseDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+      >
+        <div
+          className={styles.editForm}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <input
+            type="text"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            onKeyDown={(e) => {
+              // Completely isolated keyboard handling for edit mode
+              e.stopPropagation();
+              if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                handleSave();
+              } else if (e.key === 'Escape') {
+                e.preventDefault();
+                handleCancel();
+              }
+              // Let all other keys work normally
+            }}
+            className={styles.editInput}
+            placeholder="Task title..."
+            autoFocus
+          />
+          <textarea
+            value={editDescription}
+            onChange={(e) => setEditDescription(e.target.value)}
+            onKeyDown={(e) => {
+              // Completely isolated keyboard handling for edit mode
+              e.stopPropagation();
+              if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                handleSave();
+              } else if (e.key === 'Escape') {
+                e.preventDefault();
+                handleCancel();
+              }
+              // Let all other keys work normally
+            }}
+            className={styles.editTextarea}
+            placeholder="Add description..."
+            rows={3}
+          />
+          <div className={styles.editActions}>
+            <button
+              onClick={handleSave}
+              className={styles.saveButton}
+              type="button"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancel}
+              className={styles.cancelButton}
+              type="button"
+            >
+              Cancel
+            </button>
+          </div>
+          <p className={styles.editHint}>Press Ctrl+Enter to save</p>
         </div>
-        <p className="text-xs text-slate-500 mt-2">Press Ctrl+Enter to save</p>
       </div>
     );
   }
 
   return (
-    <div className="group bg-white border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200 cursor-pointer">
-      {/* Task Header */}
-      <div className="flex items-start justify-between mb-3">
-        <h4 className="font-medium text-slate-900 text-sm leading-relaxed flex-1 pr-2">
-          {task.title}
-        </h4>
-        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button
-            onClick={() => setIsEditing(true)}
-            className="p-1.5 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded transition-colors"
-            title="Edit task"
-          >
-            <svg
-              width="16"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() => removeTask(task.id)}
-            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-            title="Delete task"
-          >
-            <svg
-              width="16"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-          </button>
-        </div>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`${styles.task} ${styles.normal}`}
+      {...(isEditing ? {} : { ...attributes, ...listeners })}
+    >
+      <div className={styles.content}>
+        <div className={styles.title}>{task.title}</div>
+        {task.description && (
+          <div className={styles.description}>{task.description}</div>
+        )}
       </div>
 
-      {/* Task Description */}
-      {task.description && (
-        <p className="text-slate-600 text-sm mb-4 leading-relaxed">
-          {task.description}
-        </p>
-      )}
-
-      {/* Task Footer */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          {/* Status Badge */}
-          <span
-            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-              task.status === 'todo'
-                ? 'bg-slate-100 text-slate-700'
-                : task.status === 'in-progress'
-                ? 'bg-blue-100 text-blue-700'
-                : 'bg-emerald-100 text-emerald-700'
-            }`}
-          >
-            {task.status === 'todo'
-              ? 'To Do'
-              : task.status === 'in-progress'
-              ? 'In Progress'
-              : 'Done'}
-          </span>
-        </div>
-
-        {/* Created Date */}
-        <div className="flex items-center space-x-1 text-xs text-slate-500">
+      <div className={styles.actions}>
+        <button
+          onClick={handleEdit}
+          className={styles.actionButton}
+          title="Edit task"
+        >
           <svg
-            width="12"
-            height="12"
+            width="16"
+            height="16"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -175,11 +189,30 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
             />
           </svg>
-          <span>{formatDate(task.createdAt)}</span>
-        </div>
+        </button>
+        <button
+          onClick={handleDelete}
+          className={styles.actionButton}
+          title="Delete task"
+        >
+          <svg
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   );

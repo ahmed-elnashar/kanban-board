@@ -29,6 +29,7 @@ interface KanbanState {
   ) => void;
   setDraggedTask: (taskId: string | null) => void;
   reorderTasks: (columnId: string, taskIds: string[]) => void;
+  resetStore: () => void;
 }
 
 export const useKanbanStore = create<KanbanState>()(
@@ -212,20 +213,37 @@ export const useKanbanStore = create<KanbanState>()(
     },
 
     reorderTasks: (columnId: string, taskIds: string[]) => {
-      set((state: KanbanState) => {
-        const updatedColumns = state.columns.map((column) => {
+      set((state) => {
+        const newColumns = state.columns.map((column) => {
           if (column.id === columnId) {
+            // Reorder tasks based on the provided taskIds
             const reorderedTasks = taskIds
-              .map((id) => column.tasks.find((t) => t.id === id))
-              .filter((task): task is Task => task !== undefined);
+              .map((taskId) => column.tasks.find((task) => task.id === taskId))
+              .filter(
+                (task): task is NonNullable<typeof task> => task !== undefined
+              );
             return { ...column, tasks: reorderedTasks };
           }
           return column;
         });
 
-        LocalStorageService.saveColumns(updatedColumns);
-        return { columns: updatedColumns };
+        return { columns: newColumns };
       });
+    },
+
+    // Add a reset function to clear localStorage and reset to initial state
+    resetStore: () => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('kanban-tasks');
+        localStorage.removeItem('kanban-columns');
+        localStorage.removeItem('kanban-history');
+      }
+      set(() => ({
+        tasks: [],
+        columns: getInitialColumns(),
+        taskHistory: [],
+        draggedTaskId: null,
+      }));
     },
   }))
 );

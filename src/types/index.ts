@@ -54,5 +54,6 @@ export interface KanbanStore {
   ) => void;
   setDraggedTask: (taskId: string | null) => void;
   reorderTasks: (columnId: string, taskIds: string[]) => void;
+  resetStore: () => void;
 }
 

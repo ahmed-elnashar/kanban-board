@@ -31,8 +31,13 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
   if (!isExpanded) {
     return (
       <button
-        onClick={() => setIsExpanded(true)}
-        className="w-full group flex items-center justify-center px-4 py-3 bg-white border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all duration-200"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsExpanded(true);
+        }}
+        onMouseDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        className="w-auto group flex items-center justify-center px-4 py-3 bg-white border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all duration-200 mx-2 mb-2 mt-2"
       >
         <svg
           width="20"
@@ -55,12 +60,22 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full mx-2 mb-2 mt-2"
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => {
+            // Prevent drag and drop interference
+            e.stopPropagation();
+          }}
           placeholder="Task title..."
           className="w-full mb-3 px-3 py-2 text-sm font-medium text-slate-900 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
           autoFocus
@@ -68,6 +83,10 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          onKeyDown={(e) => {
+            // Prevent drag and drop interference
+            e.stopPropagation();
+          }}
           placeholder="Add description (optional)..."
           className="w-full mb-3 px-3 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
           rows={2}
@@ -76,13 +95,20 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
           <button
             type="submit"
             disabled={!title.trim()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
             className="flex-1 px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Add Task
           </button>
           <button
             type="button"
-            onClick={handleCancel}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCancel();
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
             className="px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-colors"
           >
             Cancel
