@@ -9,6 +9,11 @@ function App() {
 
   return (
     <div className="app">
+      {/* Skip link for accessibility */}
+      <a href="#board" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* Main Content Area */}
       <div className="content-area">
         <Board />

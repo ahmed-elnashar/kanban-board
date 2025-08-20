@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useTaskOperations } from '../../hooks/useTaskOperations';
@@ -9,7 +9,7 @@ interface TaskProps {
   task: TaskType;
 }
 
-export const Task: React.FC<TaskProps> = ({ task }) => {
+export const Task: React.FC<TaskProps> = memo(({ task }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [editDescription, setEditDescription] = useState(
@@ -73,6 +73,8 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
         ref={setNodeRef}
         style={style}
         className={`${styles.task} ${styles.dragging}`}
+        role="article"
+        aria-label={`Dragging task: ${task.title}`}
       >
         <div className={styles.content}>
           <div className={styles.title}>{task.title}</div>
@@ -88,6 +90,8 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
     return (
       <div
         className={styles.task}
+        role="article"
+        aria-label={`Editing task: ${task.title}`}
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
@@ -115,6 +119,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
             }}
             className={styles.editInput}
             placeholder="Task title..."
+            aria-label="Task title"
             autoFocus
           />
           <textarea
@@ -134,6 +139,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
             }}
             className={styles.editTextarea}
             placeholder="Add description..."
+            aria-label="Task description"
             rows={3}
           />
           <div className={styles.editActions}>
@@ -141,6 +147,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
               onClick={handleSave}
               className={styles.saveButton}
               type="button"
+              aria-label="Save task changes"
             >
               Save
             </button>
@@ -148,6 +155,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
               onClick={handleCancel}
               className={styles.cancelButton}
               type="button"
+              aria-label="Cancel editing"
             >
               Cancel
             </button>
@@ -163,6 +171,8 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
       ref={setNodeRef}
       style={style}
       className={`${styles.task} ${styles.normal}`}
+      role="article"
+      aria-label={`Task: ${task.title}`}
       {...(isEditing ? {} : { ...attributes, ...listeners })}
     >
       <div className={styles.content}>
@@ -177,6 +187,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
           onClick={handleEdit}
           className={styles.actionButton}
           title="Edit task"
+          aria-label={`Edit task: ${task.title}`}
         >
           <svg
             width="16"
@@ -184,6 +195,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -197,6 +209,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
           onClick={handleDelete}
           className={styles.actionButton}
           title="Delete task"
+          aria-label={`Delete task: ${task.title}`}
         >
           <svg
             width="16"
@@ -204,6 +217,7 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -216,5 +230,5 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
       </div>
     </div>
   );
-};
+});
 

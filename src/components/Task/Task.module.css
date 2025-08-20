@@ -194,3 +194,111 @@
   text-align: center;
 }
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .task {
+    padding: 0.875rem;
+  }
+
+  .actions {
+    top: 0.375rem;
+    right: 0.375rem;
+  }
+
+  .actionButton {
+    padding: 0.375rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .task {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+  }
+
+  .content {
+    margin-bottom: 0.5rem;
+  }
+
+  .title {
+    font-size: 0.8125rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .description {
+    font-size: 0.6875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .actions {
+    position: static;
+    opacity: 1;
+    margin-top: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .actionButton {
+    padding: 0.375rem;
+    font-size: 0.75rem;
+  }
+
+  .editForm {
+    margin-bottom: 0.5rem;
+  }
+
+  .editInput {
+    padding: 0.375rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .editTextarea {
+    padding: 0.375rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.6875rem;
+    min-height: 50px;
+  }
+
+  .editActions {
+    gap: 0.375rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .saveButton,
+  .cancelButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    min-width: 3.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .task {
+    padding: 0.625rem;
+  }
+
+  .title {
+    font-size: 0.75rem;
+  }
+
+  .description {
+    font-size: 0.625rem;
+  }
+
+  .actionButton {
+    padding: 0.25rem;
+  }
+
+  .editInput,
+  .editTextarea {
+    padding: 0.25rem;
+  }
+
+  .saveButton,
+  .cancelButton {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    min-width: 3rem;
+  }
+}
+

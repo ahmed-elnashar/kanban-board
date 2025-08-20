@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { useKanbanData } from '../../hooks/useKanbanData';
 import { useKanbanStore } from '../../store/kanbanStore';
 import { DndProvider } from '../DndProvider/DndProvider';
 import { Column } from '../Column/Column';
 import { Filter } from '../Filter/Filter';
 import { TaskHistory } from '../TaskHistory/TaskHistory';
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import styles from './Board.module.css';
 
-export const Board: React.FC = () => {
+export const Board: React.FC = memo(() => {
   const {
     columns,
     totalTasks,
@@ -16,6 +17,16 @@ export const Board: React.FC = () => {
     isFiltered,
   } = useKanbanData();
   const { resetStore } = useKanbanStore();
+
+  // Memoize expensive calculations
+  const boardStats = useMemo(
+    () => ({
+      totalTasks: totalTasks || 0,
+      completedTasks: completedTasks || 0,
+      progressPercentage: progressPercentage || 0,
+    }),
+    [totalTasks, completedTasks, progressPercentage]
+  );
 
   const handleReset = () => {
     if (
@@ -29,9 +40,14 @@ export const Board: React.FC = () => {
 
   return (
     <DndProvider>
-      <div className={styles.board}>
+      <div
+        id="board"
+        className={styles.board}
+        role="main"
+        aria-label="Kanban Board"
+      >
         {/* Board Header */}
-        <div className={styles.header}>
+        <header className={styles.header}>
           <div className={styles.headerContent}>
             <div>
               <h1 className={styles.title}>Kanban Board</h1>
@@ -39,41 +55,66 @@ export const Board: React.FC = () => {
                 Manage your tasks and track progress efficiently
               </p>
             </div>
-            <div className={styles.stats}>
+            <div
+              className={styles.stats}
+              role="region"
+              aria-label="Board Statistics"
+            >
               <div className={styles.stat}>
-                <div className={`${styles.statValue} ${styles.total}`}>
-                  {totalTasks || 0}
+                <div
+                  className={`${styles.statValue} ${styles.total}`}
+                  aria-label={`Total tasks: ${boardStats.totalTasks}`}
+                >
+                  {boardStats.totalTasks}
                 </div>
                 <div className={styles.statLabel}>Total Tasks</div>
               </div>
               <div className={styles.stat}>
-                <div className={`${styles.statValue} ${styles.completed}`}>
-                  {completedTasks || 0}
+                <div
+                  className={`${styles.statValue} ${styles.completed}`}
+                  aria-label={`Completed tasks: ${boardStats.completedTasks}`}
+                >
+                  {boardStats.completedTasks}
                 </div>
                 <div className={styles.statLabel}>Completed</div>
               </div>
               <div className={styles.stat}>
-                <div className={`${styles.statValue} ${styles.progress}`}>
-                  {progressPercentage || 0}%
+                <div
+                  className={`${styles.statValue} ${styles.progress}`}
+                  aria-label={`Progress: ${boardStats.progressPercentage}%`}
+                >
+                  {boardStats.progressPercentage}%
                 </div>
                 <div className={styles.statLabel}>Progress</div>
               </div>
-              <button onClick={handleReset} className={styles.resetButton}>
+              <button
+                onClick={handleReset}
+                className={styles.resetButton}
+                aria-label="Reset board and clear all data"
+                title="Reset Board"
+              >
                 Reset Board
               </button>
             </div>
           </div>
 
           {/* Progress Bar */}
-          {(totalTasks || 0) > 0 && (
-            <div className={styles.progressBar}>
+          {boardStats.totalTasks > 0 && (
+            <div
+              className={styles.progressBar}
+              role="progressbar"
+              aria-valuenow={boardStats.progressPercentage}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`Progress: ${boardStats.progressPercentage}%`}
+            >
               <div
                 className={styles.progressFill}
-                style={{ width: `${progressPercentage || 0}%` }}
+                style={{ width: `${boardStats.progressPercentage}%` }}
               />
             </div>
           )}
-        </div>
+        </header>
 
         {/* Filter and History */}
         <Filter />
@@ -87,15 +128,17 @@ export const Board: React.FC = () => {
         )}
 
         {/* Kanban Columns */}
-        <div className={styles.columns}>
+        <div className={styles.columns} role="region" aria-label="Task Columns">
           {columns && columns.length > 0 ? (
             columns.map((column) => <Column key={column.id} column={column} />)
           ) : (
-            <div className={styles.loading}>Loading board...</div>
+            <div className={styles.loading}>
+              <LoadingSpinner size="large" text="Loading board..." />
+            </div>
           )}
         </div>
       </div>
     </DndProvider>
   );
-};
+});
 

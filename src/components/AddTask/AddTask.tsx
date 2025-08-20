@@ -39,6 +39,8 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         className="w-auto group flex items-center justify-center px-4 py-3 bg-white border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all duration-200 mx-2 mb-2 mt-2"
+        aria-label="Add new task to this column"
+        title="Add New Task"
       >
         <svg
           width="20"
@@ -47,6 +49,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
@@ -78,6 +81,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
             e.stopPropagation();
           }}
           placeholder="Task title..."
+          aria-label="Task title"
           className="w-full mb-3 px-3 py-2 text-sm font-medium text-slate-900 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
           autoFocus
         />
@@ -89,6 +93,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
             e.stopPropagation();
           }}
           placeholder="Add description (optional)..."
+          aria-label="Task description"
           className="w-full mb-3 px-3 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors"
           rows={2}
         />
@@ -99,6 +104,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
             className={`${styles.saveButton} flex-1`}
+            aria-label="Add new task"
           >
             Add Task
           </button>
@@ -111,6 +117,7 @@ export const AddTask: React.FC<AddTaskProps> = ({ columnId }) => {
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
             className={styles.cancelButton}
+            aria-label="Cancel adding task"
           >
             Cancel
           </button>

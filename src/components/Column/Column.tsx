@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import {
   SortableContext,
@@ -14,7 +14,7 @@ interface ColumnProps {
   column: ColumnType;
 }
 
-export const Column: React.FC<ColumnProps> = ({ column }) => {
+export const Column: React.FC<ColumnProps> = memo(({ column }) => {
   const {
     attributes,
     listeners,
@@ -112,5 +112,5 @@ export const Column: React.FC<ColumnProps> = ({ column }) => {
       </div>
     </div>
   );
-};
+});
 
