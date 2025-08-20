@@ -21,19 +21,19 @@ export const Board: React.FC = () => {
           <div className={styles.stats}>
             <div className={styles.stat}>
               <div className={`${styles.statValue} ${styles.total}`}>
-                {totalTasks}
+                {totalTasks || 0}
               </div>
               <div className={styles.statLabel}>Total Tasks</div>
             </div>
             <div className={styles.stat}>
               <div className={`${styles.statValue} ${styles.completed}`}>
-                {completedTasks}
+                {completedTasks || 0}
               </div>
               <div className={styles.statLabel}>Completed</div>
             </div>
             <div className={styles.stat}>
               <div className={`${styles.statValue} ${styles.progress}`}>
-                {progressPercentage}%
+                {progressPercentage || 0}%
               </div>
               <div className={styles.statLabel}>Progress</div>
             </div>
@@ -41,11 +41,11 @@ export const Board: React.FC = () => {
         </div>
 
         {/* Progress Bar */}
-        {totalTasks > 0 && (
+        {(totalTasks || 0) > 0 && (
           <div className={styles.progressBar}>
             <div
               className={styles.progressFill}
-              style={{ width: `${progressPercentage}%` }}
+              style={{ width: `${progressPercentage || 0}%` }}
             />
           </div>
         )}
@@ -53,9 +53,11 @@ export const Board: React.FC = () => {
 
       {/* Kanban Columns */}
       <div className={styles.columns}>
-        {columns.map((column) => (
-          <Column key={column.id} column={column} />
-        ))}
+        {columns && columns.length > 0 ? (
+          columns.map((column) => <Column key={column.id} column={column} />)
+        ) : (
+          <div className={styles.loading}>Loading board...</div>
+        )}
       </div>
     </div>
   );

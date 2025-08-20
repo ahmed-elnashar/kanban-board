@@ -108,6 +108,16 @@
   gap: 2rem;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.125rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .board {
     padding: 1rem;
