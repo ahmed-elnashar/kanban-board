@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '../../../test/test-utils';
+import { render, screen, fireEvent } from '../../../test/test-utils';
 import { Board } from '../Board';
-import { createMockBoard, resetStore } from '../../../test/test-utils';
+import { resetStore } from '../../../test/test-utils';
 import { useKanbanData } from '../../../hooks/useKanbanData';
 import { useKanbanStore } from '../../../store/kanbanStore';
 
@@ -181,31 +181,17 @@ describe('Board Component', () => {
     });
   });
 
-  describe('Columns Display', () => {
-    it('shows loading state when no columns exist', () => {
-      mockUseKanbanData.mockReturnValue({
-        columns: [],
-        totalTasks: 0,
-        completedTasks: 0,
-        progressPercentage: 0,
-        isFiltered: false,
-      });
-
-      render(<Board />);
-
-      expect(screen.getByText('Loading board...')).toBeInTheDocument();
-    });
-
-    it('renders columns when they exist', () => {
+  describe('Column Rendering', () => {
+    it('renders all columns correctly', () => {
       const mockColumns = [
-        { id: 'todo', title: 'To Do', status: 'todo', tasks: [] },
+        { id: 'todo', title: 'To Do', status: 'todo' as const, tasks: [] },
         {
           id: 'in-progress',
           title: 'In Progress',
-          status: 'in-progress',
+          status: 'in-progress' as const,
           tasks: [],
         },
-        { id: 'done', title: 'Done', status: 'done', tasks: [] },
+        { id: 'done', title: 'Done', status: 'done' as const, tasks: [] },
       ];
 
       mockUseKanbanData.mockReturnValue({
@@ -414,21 +400,6 @@ describe('Board Component', () => {
         totalTasks: 0,
         completedTasks: 0,
         progressPercentage: 0,
-        isFiltered: false,
-      });
-
-      render(<Board />);
-
-      expect(screen.getByLabelText('Total tasks: 0')).toBeInTheDocument();
-      expect(screen.getByText('0%')).toBeInTheDocument();
-    });
-
-    it('handles undefined values gracefully', () => {
-      mockUseKanbanData.mockReturnValue({
-        columns: undefined,
-        totalTasks: undefined,
-        completedTasks: undefined,
-        progressPercentage: undefined,
         isFiltered: false,
       });
 

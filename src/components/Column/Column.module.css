@@ -65,51 +65,51 @@
 }
 
 /* Column theme classes */
-.bg-slate-50 {
+.bgSlate50 {
   background-color: #f8fafc;
 }
 
-.bg-blue-50 {
+.bgBlue50 {
   background-color: #eff6ff;
 }
 
-.bg-emerald-50 {
+.bgEmerald50 {
   background-color: #ecfdf5;
 }
 
-.border-slate-200 {
+.borderSlate200 {
   border-color: #e2e8f0;
 }
 
-.border-blue-200 {
+.borderBlue200 {
   border-color: #bfdbfe;
 }
 
-.border-emerald-200 {
+.borderEmerald200 {
   border-color: #a7f3d0;
 }
 
-.bg-slate-100 {
+.bgSlate100 {
   background-color: #f1f5f9;
 }
 
-.bg-blue-100 {
+.bgBlue100 {
   background-color: #dbeafe;
 }
 
-.bg-emerald-100 {
+.bgEmerald100 {
   background-color: #d1fae5;
 }
 
-.text-slate-700 {
+.textSlate700 {
   color: #334155;
 }
 
-.text-blue-700 {
+.textBlue700 {
   color: #1d4ed8;
 }
 
-.text-emerald-700 {
+.textEmerald700 {
   color: #047857;
 }
 

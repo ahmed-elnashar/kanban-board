@@ -1,7 +1,6 @@
-import React, { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import React from 'react';
+import { render, type RenderOptions } from '@testing-library/react';
 import { DndProvider } from '../components/DndProvider/DndProvider';
-import { useKanbanStore } from '../store/kanbanStore';
 import type { Task, Column } from '../types';
 
 // Custom render function that includes DndProvider
@@ -11,12 +10,12 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
 
 // Custom render function that doesn't include DndProvider (for components that don't need it)
 const customRenderWithoutDnd = (
-  ui: ReactElement,
+  ui: React.ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, options);
 
 const customRender = (
-  ui: ReactElement,
+  ui: React.ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { wrapper: AllTheProviders, ...options });
 

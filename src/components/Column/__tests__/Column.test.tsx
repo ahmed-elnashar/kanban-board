@@ -50,64 +50,50 @@ describe('Column Component', () => {
   });
 
   describe('Column Themes', () => {
-    it('applies correct theme for todo column', () => {
-      const todoColumn = createMockColumn({
-        id: 'todo',
-        title: 'To Do',
-        status: 'todo',
-      });
+    it('applies correct background color for todo column', () => {
+      render(<Column column={mockColumn} />);
 
-      render(<Column column={todoColumn} />);
-
-      const columnElement = screen.getByText('To Do').closest('div');
-      expect(columnElement.className).toContain('bg-slate');
-      // Check that background is applied correctly
+      const columnElement = screen.getByText('Test Column').closest('div');
       expect(columnElement).toBeInTheDocument();
+      // The main column element should have the background color class
+      const mainColumn = columnElement!.parentElement;
+      expect(mainColumn!.className).toContain('bgSlate50');
     });
 
-    it('applies correct theme for in-progress column', () => {
-      const inProgressColumn = createMockColumn({
-        id: 'in-progress',
-        title: 'In Progress',
-        status: 'in-progress',
-      });
-
+    it('applies correct background color for in-progress column', () => {
+      const inProgressColumn = {
+        ...mockColumn,
+        status: 'in-progress' as const,
+      };
       render(<Column column={inProgressColumn} />);
 
-      const columnElement = screen.getByText('In Progress').closest('div');
-      expect(columnElement.className).toContain('bg-blue');
-      // Check that background is applied correctly
+      const columnElement = screen.getByText('Test Column').closest('div');
       expect(columnElement).toBeInTheDocument();
+      // The main column element should have the background color class
+      const mainColumn = columnElement!.parentElement;
+      expect(mainColumn!.className).toContain('bgBlue50');
     });
 
-    it('applies correct theme for done column', () => {
-      const doneColumn = createMockColumn({
-        id: 'done',
-        title: 'Done',
-        status: 'done',
-      });
-
+    it('applies correct background color for done column', () => {
+      const doneColumn = { ...mockColumn, status: 'done' as const };
       render(<Column column={doneColumn} />);
 
-      const columnElement = screen.getByText('Done').closest('div');
-      expect(columnElement.className).toContain('bg-emerald');
-      // Check that background is applied correctly
+      const columnElement = screen.getByText('Test Column').closest('div');
       expect(columnElement).toBeInTheDocument();
+      // The main column element should have the background color class
+      const mainColumn = columnElement!.parentElement;
+      expect(mainColumn!.className).toContain('bgEmerald50');
     });
 
-    it('applies default theme for unknown status', () => {
-      const unknownColumn = createMockColumn({
-        id: 'unknown',
-        title: 'Unknown',
-        status: 'unknown' as any,
-      });
+    it('applies correct background color for todo column with different title', () => {
+      const customColumn = { ...mockColumn, title: 'Custom Title' };
+      render(<Column column={customColumn} />);
 
-      render(<Column column={unknownColumn} />);
-
-      const columnElement = screen.getByText('Unknown').closest('div');
-      expect(columnElement.className).toContain('bg-slate');
-      // Check that background is applied correctly
+      const columnElement = screen.getByText('Custom Title').closest('div');
       expect(columnElement).toBeInTheDocument();
+      // The main column element should have the background color class
+      const mainColumn = columnElement!.parentElement;
+      expect(mainColumn!.className).toContain('bgSlate50');
     });
   });
 

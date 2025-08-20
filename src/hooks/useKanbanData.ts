@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useKanbanStore } from '../store/kanbanStore';
 
 export const useKanbanData = () => {
-  const { columns, tasks, filterQuery } = useKanbanStore();
+  const { columns, filterQuery } = useKanbanStore();
 
   // Filter tasks based on query
   const filteredColumns = useMemo(() => {

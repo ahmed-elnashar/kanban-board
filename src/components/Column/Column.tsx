@@ -39,31 +39,31 @@ export const Column: React.FC<ColumnProps> = memo(({ column }) => {
     switch (status) {
       case 'todo':
         return {
-          bgColor: 'bg-slate-50',
-          borderColor: 'border-slate-200',
-          headerColor: 'bg-slate-100',
-          titleColor: 'text-slate-700',
+          bgColor: styles.bgSlate50,
+          borderColor: styles.borderSlate200,
+          headerColor: styles.bgSlate100,
+          titleColor: styles.textSlate700,
         };
       case 'in-progress':
         return {
-          bgColor: 'bg-blue-50',
-          borderColor: 'border-blue-200',
-          headerColor: 'bg-blue-100',
-          titleColor: 'text-blue-700',
+          bgColor: styles.bgBlue50,
+          borderColor: styles.borderBlue200,
+          headerColor: styles.bgBlue100,
+          titleColor: styles.textBlue700,
         };
       case 'done':
         return {
-          bgColor: 'bg-emerald-50',
-          borderColor: 'border-emerald-200',
-          headerColor: 'bg-emerald-100',
-          titleColor: 'text-emerald-700',
+          bgColor: styles.bgEmerald50,
+          borderColor: styles.borderEmerald200,
+          headerColor: styles.bgEmerald100,
+          titleColor: styles.textEmerald700,
         };
       default:
         return {
-          bgColor: 'bg-slate-50',
-          borderColor: 'border-slate-200',
-          headerColor: 'bg-slate-100',
-          titleColor: 'text-slate-700',
+          bgColor: styles.bgSlate50,
+          borderColor: styles.borderSlate200,
+          headerColor: styles.bgSlate100,
+          titleColor: styles.textSlate700,
         };
     }
   };

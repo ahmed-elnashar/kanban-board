@@ -1,8 +1,7 @@
-import React from 'react';
-import './App.css';
 import { Board } from './components/Board/Board';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts/KeyboardShortcuts';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import './index.css';
 
 function App() {
   useKeyboardShortcuts();

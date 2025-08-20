@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { generateId, formatDate, getInitialColumns } from '../helpers';
-import type { Column } from '../../types';
 
 describe('Helper Functions', () => {
   beforeEach(() => {
@@ -178,7 +177,12 @@ describe('Helper Functions', () => {
       const originalLength = columns.length;
 
       // Attempting to modify should not affect the original
-      columns.push({} as Column);
+      columns.push({
+        id: 'test',
+        title: 'Test',
+        status: 'todo' as const,
+        tasks: [],
+      });
       expect(columns.length).toBe(originalLength + 1);
 
       // But the function should still return the original structure
@@ -193,6 +197,22 @@ describe('Helper Functions', () => {
       expect(columns1[0].status).toBe(columns2[0].status);
       expect(columns1[1].status).toBe(columns2[1].status);
       expect(columns1[2].status).toBe(columns2[2].status);
+    });
+
+    it('handles edge cases gracefully', () => {
+      const columns = getInitialColumns();
+
+      // Test that we get the expected 3 columns
+      expect(columns).toHaveLength(3);
+
+      // Test that each column has the correct structure
+      columns.forEach((column) => {
+        expect(column).toHaveProperty('id');
+        expect(column).toHaveProperty('title');
+        expect(column).toHaveProperty('status');
+        expect(column).toHaveProperty('tasks');
+        expect(Array.isArray(column.tasks)).toBe(true);
+      });
     });
   });
 
